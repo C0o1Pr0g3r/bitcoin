@@ -23,7 +23,6 @@
 #include <logging/timer.h>
 #include <net.h>
 #include <net_processing.h>
-#include <node/blockstorage.h>
 #include <node/context.h>
 #include <node/transaction.h>
 #include <node/utxo_snapshot.h>
@@ -56,7 +55,6 @@
 using kernel::CCoinsStats;
 using kernel::CoinStatsHashType;
 
-using node::BlockManager;
 using node::NodeContext;
 using node::SnapshotMetadata;
 
@@ -94,7 +92,7 @@ double GetDifficulty(const CBlockIndex* blockindex)
     return dDiff;
 }
 
-static int ComputeNextBlockAndDepth(const CBlockIndex* tip, const CBlockIndex* blockindex, const CBlockIndex*& next)
+int ComputeNextBlockAndDepth(const CBlockIndex* tip, const CBlockIndex* blockindex, const CBlockIndex*& next)
 {
     next = tip->GetAncestor(blockindex->nHeight + 1);
     if (next && next->pprev == blockindex) {
@@ -575,7 +573,7 @@ static RPCHelpMan getblockheader()
     };
 }
 
-static CBlock GetBlockChecked(BlockManager& blockman, const CBlockIndex* pblockindex)
+CBlock GetBlockChecked(BlockManager& blockman, const CBlockIndex* pblockindex)
 {
     CBlock block;
     {

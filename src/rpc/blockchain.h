@@ -7,6 +7,7 @@
 
 #include <consensus/amount.h>
 #include <core_io.h>
+#include <node/blockstorage.h>
 #include <streams.h>
 #include <sync.h>
 #include <util/fs.h>
@@ -15,6 +16,8 @@
 #include <any>
 #include <stdint.h>
 #include <vector>
+
+using node::BlockManager;
 
 class CBlock;
 class CBlockIndex;
@@ -56,5 +59,8 @@ UniValue CreateUTXOSnapshot(
     AutoFile& afile,
     const fs::path& path,
     const fs::path& tmppath);
+
+CBlock GetBlockChecked(BlockManager& blockman, const CBlockIndex* pblockindex);
+int ComputeNextBlockAndDepth(const CBlockIndex* tip, const CBlockIndex* blockindex, const CBlockIndex*& next);
 
 #endif // BITCOIN_RPC_BLOCKCHAIN_H
